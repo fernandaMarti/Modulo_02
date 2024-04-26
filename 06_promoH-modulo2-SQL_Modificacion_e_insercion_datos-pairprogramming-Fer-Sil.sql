@@ -28,7 +28,7 @@ USE tienda_zapatillas;
 		total: madre mía!!! Se nos ha olvidado incluir el total de la cada factura generada😨!
         Creemos esa columna con un tipo de datos decimal. */
         ALTER TABLE facturas 
-        ADD COLUMN total_factura DECIMAL;
+        ADD COLUMN total_factura DECIMAL(10,2);
         
               
 /*  Lo primero que vamos a hacer es insertar datos en nuestra BBDD con los siguientes datos:
@@ -67,18 +67,23 @@ id_cliente	nombre	numero_telefono	   email	       direccion	      ciudad	provinc
 3			Carmen  298463759		carmen@email.com	Calle del Color   Vigo		Pontevedra  23456
 
 */
-INSERT INTO empleados (nombre, tienda, salario, fecha_incorporacion)
-VALUES ("Laura", "Alcobendas", 25987.00 , "2010-09-03"), 
-	   ("María", "Sevilla", 0.00, "2001-04-11"),
-       ("Ester", "Oviedo", 30165.98 , "2000-11-29");
+INSERT INTO clientes (nombre,numero_telefono,email,direccion,ciudad,provincia,codigo_postal)
+VALUES ("Monica", 1234567289, "monica@email.com" ,"Calle Felicidad","Móstoles", "Madrid","28176"), 
+	   ("Lorena", 289345678, "lorena@email.com", "Calle Alegria","Barcelona","Barcelona","12346"),
+       ("Carmen", 298463759, "carmen@email.com" ,"Calle del Color","Vigo","Pontevedra","23456");
+       
 /* Tabla facturas
 
 id_factura	numero_factura	fecha	    id_zapatilla	id_empleado	id_cliente	total
-1				123			11/12/2001		1				2			1		54,98	
+1				123			11/12/2001		1				2			2		54,98	
 2				1234		23/05/2005		1				1			3		89,91
 3				12345		18/09/2015		2				3			3		76,23
 */
 
+INSERT INTO facturas (numero_factura,fecha,id_zapatilla_fact,id_empleado_fact,id_cliente_fact,total_factura)
+VALUES ("123", "2001-12-11", 1 ,2, 2,54.98), 
+	   ("1234", "2005-05-23",1, 1,3,89.91),
+       ("12345", "2015-09-18", 2 ,3,3,76.23);
 
 /* De nuevo nos hemos dado cuenta que hay algunos errores en la inserción de datos. 
 En este ejercicios los actualizaremos para que nuestra BBDD este perfectita.
