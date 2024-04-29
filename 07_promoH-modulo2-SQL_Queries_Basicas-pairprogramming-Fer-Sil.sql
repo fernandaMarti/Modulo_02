@@ -165,11 +165,7 @@ OFFSET 4;
 De cara a ver cómo de diversificado está el negocio, se nos solicita una lista de las categorías que componen 
 los tipos de pedido de la empresa. Queremos que la lista de resultado sea renombrada como "NombreDeCategoria".*/
 
-SELECT 
-
-
-
-
+SELECT DISTINCT category AS NombreDeCategoria FROM products;
 
 /* 16. Selecciona envios con retraso:
 
@@ -191,6 +187,11 @@ Gracias a un análisis realizado en los últimos meses en la empresa, se ha comp
 puede dar más beneficios parece ser el de aquellos con un precio mayor o igual a 15 dólares, pero menor o igual que 50 dólares. 
 Selecciona los datos de ese rango de productos usando el operador BETWEEN. */
 
+SELECT order_id, unit_price*quantity AS importe_total
+FROM order_details
+ORDER BY importe_total ASC
+LIMIT 5
+OFFSET 4;
 
 
 
