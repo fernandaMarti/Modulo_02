@@ -5,15 +5,20 @@
 
 	Desde la división de productos nos piden conocer el precio de los productos que tienen el precio más alto y más bajo. 
     Dales el alias lowestPrice y highestPrice.*/
-    
+SELECT MAX(UnitPrice) AS highestPrice,
+	   MIN(UnitPrice) AS lowestPrice
+FROM products;
 /* 2. Conociendo el numero de productos y su precio medio:
 	Adicionalmente nos piden que diseñemos otra consulta para conocer el número de productos y el precio medio de todos ellos 
     (en general, no por cada producto).*/
-    
+SELECT COUNT(*), AVG(UnitPrice) 
+FROM PRODUCTS;
 /* 3. Sacad la máxima y mínima carga de los pedidos de UK:
 	Nuestro siguiente encargo consiste en preparar una consulta que devuelva la máxima y mínima cantidad de carga para un 
     pedido (freight) enviado a Reino Unido (United Kingdom).*/
-    
+SELECT MAX(Freight), MIN(Freight)
+FROM orders
+WHERE ShipCountry = "UK";
     
     
 /* 4. Qué productos se venden por encima del precio medio:
@@ -22,7 +27,22 @@
     ya que sospechan que dicho número es demasiado elevado. También quieren que ordenemos los resultados por su precio 
     de mayor a menor.
 	📌NOTA: para este ejercicio puedes necesitar dos consultas separadas y usar el resultado de la primera para filtrar la segunda.*/
+ SELECT AVG(UnitPrice) AS precio_medio, ProductName
+ FROM products
+ GROUP BY ProductName; 
  
+ SELECT ProductName, UnitPrice
+ FROM Products
+ ORDER BY UnitPrice ASC
+ HAVING UnitPrice > AVG(UnitPrice) AS precio_medio;
+ 
+ SELECT AVG(UnitPrice) AS promProd
+ FROM products;
+ 
+ SELECT DISTINCT ProductName, UnitPrice
+ FROM products
+ WHERE UnitPrice > (28.86)
+ ORDER BY UnitPrice DESC
  
  
  
