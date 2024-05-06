@@ -5,15 +5,20 @@
 
 	Desde la división de productos nos piden conocer el precio de los productos que tienen el precio más alto y más bajo. 
     Dales el alias lowestPrice y highestPrice.*/
-    
+SELECT MAX(UnitPrice) AS highestPrice,
+	   MIN(UnitPrice) AS lowestPrice
+FROM products;
 /* 2. Conociendo el numero de productos y su precio medio:
 	Adicionalmente nos piden que diseñemos otra consulta para conocer el número de productos y el precio medio de todos ellos 
     (en general, no por cada producto).*/
-    
+SELECT COUNT(*), AVG(UnitPrice) 
+FROM PRODUCTS;
 /* 3. Sacad la máxima y mínima carga de los pedidos de UK:
 	Nuestro siguiente encargo consiste en preparar una consulta que devuelva la máxima y mínima cantidad de carga para un 
     pedido (freight) enviado a Reino Unido (United Kingdom).*/
-    
+SELECT MAX(Freight), MIN(Freight)
+FROM orders
+WHERE ShipCountry = "UK";
     
     
 /* 4. Qué productos se venden por encima del precio medio:
@@ -24,6 +29,14 @@
 	📌NOTA: para este ejercicio puedes necesitar dos consultas separadas y usar el resultado de la primera para filtrar la segunda.*/
  
  
+ SELECT AVG(UnitPrice) AS promProd
+ FROM products;
+ 
+ SELECT DISTINCT ProductName, UnitPrice
+ FROM products
+ WHERE UnitPrice > (28.86)
+ ORDER BY UnitPrice DESC
+ 
  
  
  
@@ -31,6 +44,9 @@
 De cara a estudiar el histórico de la empresa nos piden una consulta para conocer el número de productos que se han descontinuado. 
 El atributo Discontinued es un booleano: si es igual a 1 el producto ha sido descontinuado.*/
 
+SELECT COUNT(*) AS NumeroProductosDescontinuados
+FROM products
+WHERE Discontinued = 1;
 
 
 /* 6. Detalles de los productos de la query anterior:
@@ -38,11 +54,21 @@ Adicionalmente nos piden detalles de aquellos productos no descontinuados, sobre
 Como puede que salgan demasiados resultados, nos piden que los limitemos a los 10 con ID más elevado, que serán los más recientes. 
 No nos pueden decir del departamento si habrá pocos o muchos resultados, pero lo limitamos por si acaso. */
 
+SELECT ProductID, ProductName
+FROM products
+WHERE Discontinued = 0
+ORDER BY ProductID DESC
+LIMIT 10;
 
 
 /* 7. Relación entre número de pedidos y máxima carga:
 Desde logística nos piden el número de pedidos y la máxima cantidad de carga de entre los mismos (freight) que han sido 
-enviados por cada empleado (mostrando el ID de empleado en cada caso).
+enviados por cada empleado (mostrando el ID de empleado en cada caso).*/
+
+SELECT EmployeeID, COUNT(OrderID) AS NumeroPedidos, MAX(Freight) AS MaximaCarga
+FROM Orders
+GROUP BY EmployeeID;
+
 
 
 
@@ -52,6 +78,11 @@ En el resultado anterior se han incluido muchos pedidos cuya fecha de envío est
 la consulta en este aspecto. También nos piden que ordenemos los resultados según el ID de empleado para que la visualización 
 sea más sencilla.*/
 
+SELECT EmployeeID, COUNT(OrderID) AS NumeroPedidos, MAX(Freight) AS MaximaCarga
+FROM Orders
+WHERE ShippedDate IS NOT NULL
+GROUP BY EmployeeID
+ORDER BY EmployeeID;
 
 
 
@@ -61,6 +92,10 @@ El siguiente paso en el análisis de los pedidos va a consistir en conocer mejor
 Por lo tanto, tendremos que generar una consulta que nos saque el número de pedidos para cada día, mostrando de manera separada 
 el día (DAY()), el mes (MONTH()) y el año (YEAR()).*/
 
+SELECT DAY(OrderDate) AS Dia, MONTH(OrderDate) AS Mes, YEAR(OrderDate) AS Anio, COUNT(*) AS NumeroPedidos
+FROM Orders
+GROUP BY YEAR(OrderDate), MONTH(OrderDate), DAY(OrderDate)
+ORDER BY Anio, Mes, Dia;
 
 
 
@@ -68,19 +103,31 @@ el día (DAY()), el mes (MONTH()) y el año (YEAR()).*/
 La consulta anterior nos muestra el número de pedidos para cada día concreto, pero esto es demasiado detalle. 
 Genera una modificación de la consulta anterior para que agrupe los pedidos por cada mes concreto de cada año.*/
 
-
+SELECT YEAR(OrderDate) AS Anio, MONTH(OrderDate) AS Mes, COUNT(*) AS NumeroPedidos
+FROM orders
+GROUP BY YEAR(OrderDate), MONTH(OrderDate) 
+ORDER BY Anio, mes;
 
 
 /* 11. Seleccionad las ciudades con 4 o más empleadas:
 Desde recursos humanos nos piden seleccionar los nombres de las ciudades con 4 o más empleadas de cara a estudiar 
 la apertura de nuevas oficinas.*/
 
-
+SELECT City, COUNT(EmployeeID) AS NumeroEmpleados
+FROM Employees
+GROUP BY City
+HAVING COUNT(EmployeeID) >= 4;
 
 
 /* 12. Cread una nueva columna basándonos en la cantidad monetaria:
 Necesitamos una consulta que clasifique los pedidos en dos categorías ("Alto" y "Bajo") en función de la cantidad monetaria 
 total que han supuesto: por encima o por debajo de 2000 euros. */
 
-
+SELECT salario,  
+CASE 
+    WHEN salario < 2000 THEN "Bajo"   
+    WHEN salario > 3000 THEN "Alto"  
+    ELSE "Medio"   
+    END AS RangoSalario 
+FROM empleadas;  
 
