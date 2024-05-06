@@ -10,8 +10,9 @@ los ejercicios, para poder saber qué tablas tenemos que unir para obtener un re
 
 /* 1. Pedidos por empresa en UK:
 
-Desde las oficinas en UK nos han pedido con urgencia que realicemos una consulta a la base de datos con la que podamos conocer 
-cuántos pedidos ha realizado cada empresa cliente de UK. Nos piden el ID del cliente y el nombre de la empresa y el número de pedidos.
+Desde las oficinas en UK nos han pedido con urgencia que realicemos una consulta a la base de datos con la que podamos 
+conocer cuántos pedidos ha realizado cada empresa cliente de UK. Nos piden el ID del cliente y el nombre de la empresa 
+y el número de pedidos.
 
 Deberéis obtener una tabla similar a esta:
 
@@ -19,9 +20,12 @@ Nombre_empresa   Identificador  NumeroPedidos
 
 */
 
-
-
-
+SELECT C.CompanyName,C.CustomerID,COUNT(O.OrderID)
+FROM customers AS C
+INNER JOIN orders AS O
+ON C.CustomerID = O.CustomerID
+WHERE O.ShipCountry ='UK'
+GROUP BY C.customerID;
 
 
 /* Productos pedidos por empresa en UK por año:
@@ -35,8 +39,14 @@ El resultado será una tabla similar a esta:
 
 NombreEmpresa   Año    NumObjetos */
 
-
-
+SELECT customers.CompanyName, YEAR(orders.OrderDate), SUM(orderdetails.Quantity)
+FROM customers
+INNER JOIN orders
+ON customers.CustomerID = orders.CustomerID
+INNER JOIN orderdetails
+ON orderdetails.OrderID = orders.OrderID
+WHERE customers.Country = 'UK'
+GROUP BY customers.CompanyName, YEAR(orders.OrderDate);
 
 
 /* Mejorad la query anterior:
