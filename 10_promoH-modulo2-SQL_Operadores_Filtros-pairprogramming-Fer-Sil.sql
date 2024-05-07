@@ -11,12 +11,12 @@ FROM customers;
 Por un extraño motivo, nuestro jefe quiere que le devolvamos una tabla con aquelas compañias que están afincadas 
 en ciudades que empiezan por "A" o "B". Necesita que le devolvamos la ciudad, el nombre de la compañia y el 
 nombre de contacto.
-
 Los resultados deberán ser:
-
 City   CompanyName	ContactName  */
 
-
+SELECT city, customer_name AS companyName, CONCAT(contact_last_name, ' ' , contact_first_name) AS ContactName
+FROM customers
+WHERE city REGEXP ('^[AB]');
 
 
 
@@ -26,12 +26,20 @@ City   CompanyName	ContactName  */
 
 En este caso, nuestro objetivo es devolver los mismos campos que en la query anterior el número de total 
 de pedidos que han hecho todas las ciudades que empiezan por "L".
-
 Deberéis tener una tabla como la siguiente:
-
 	ciudad   empresa   persona_contacto  numero_pedidos */
-    
-    
+
+SELECT city AS ciudad, customer_name AS empresa, CONCAT(contact_last_name, ' ' , contact_first_name)
+ AS persona_contacto   
+FROM customers
+WHERE city LIKE 'L%'
+
+UNION
+
+SELECT customer_number, order_number
+FROM orders 
+GROUP BY customer_number 
+   
     
     
     
