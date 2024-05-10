@@ -2,23 +2,18 @@
 /*1. Extraed los pedidos con el máximo "order_date" para cada empleado.
 Nuestro jefe quiere saber la fecha de los pedidos más recientes que ha gestionado cada empleado. 
 Para eso nos pide que lo hagamos con una query correlacionada.*/
-SELECT MAX(order_date)
-FROM orders;
-
-SELECT DISTINC(customer_number), MAX(order_date)
-FROM orders;
+SELECT order_id, customer_id, employee_id, order_date
+FROM orders AS Or1
+WHERE Or1.order_date = (SELECT MAX(order_date) 
+						FROM orders AS Or2
+						WHERE Or1.employee_id = Or2.employee_id);
 
 
 
 /*2. Extraed el precio unitario máximo (unit_price) de cada producto vendido.
 Supongamos que ahora nuestro jefe quiere un informe de los productos vendidos y su precio unitario. 
 De nuevo lo tendréis que hacer con queries correlacionadas.*/
-SELECT * FROM northwind.order_details;
-SELECT DISTINCT(product_id), unit_price
-FROM order_details AS Od1
-WHERE Od1.unit_price = (SELECT MAX(unit_price)
-						FROM order_details AS Od2
-						WHERE Od1.product_id = Od2.product_id);
+
 /*3. Extraed información de los productos "Beverages"
 En este caso nuestro jefe nos pide que le devolvamos toda la información necesaria para identificar un tipo de producto. 
 En concreto, tienen especial interés por los productos con categoría "Beverages". 
